@@ -8,6 +8,8 @@ Added modeules to the project:
 
 <li>ListSCD.py</li>
 <li>Repetition.py</li>
+<li>complex_sim.py</li>
+<li>Sim_utils.py</li>
 
 Added Methods to the project:
 
@@ -22,7 +24,11 @@ Added Methods to the project:
 <li>fiveG_shortnening Method in Shorten Class</li>
 <li>frozen_pattern_5g Method in Shorten Class</li>
 <li>__init__ Method in CRC Class</li>
-<li>detection Method in CRC Class</li>
+<li>data_transform function in Sim_utils</li>
+<li>snr_gen function in Sim_utils</li>
+<li>crc_selector function in Sim_utils</li>
+<li>matching_scheme_selector function in Sim_utils</li>
+<li>sim_plot function in Sim_utils</li>
 
 
 Existing Methods edited in the project:
