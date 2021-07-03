@@ -4,6 +4,8 @@ Project focuses on implementing CRC aiaded SCL decoder and Rate Matching schemes
 
 README.md instructions still applies for most part of the project.
 
+To simulate, edit and run the <strong>complex_sim.py</strong> file or <strong>complex_sim.ipynb</strong> file for interactive simulation
+
 <br>
 <strong>Added modeules to the project:</strong>
 
@@ -47,4 +49,3 @@ README.md instructions still applies for most part of the project.
 <li>Shorten: update_spcc method</li>
 
 <br><br>
-To simulate, edit and run the <strong>complex_sim.py</strong> file or <strong>complex_sim.ipynb</strong> file for interactive simulation
