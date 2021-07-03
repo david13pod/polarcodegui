@@ -4,6 +4,7 @@ Project focuses on implementing CRC aiaded SCL decoder and Rate Matching schemes
 
 README.md instructions still applies for most part of the project.
 
+<br>
 Added modeules to the project:
 
 <li>ListSCD.py</li>
@@ -11,6 +12,7 @@ Added modeules to the project:
 <li>complex_sim.py</li>
 <li>Sim_utils.py</li>
 
+<br><br>
 Added Methods to the project:
 
 <li>get_polar_5g_positions Method in Construct Class</li>
@@ -30,7 +32,7 @@ Added Methods to the project:
 <li>matching_scheme_selector function in Sim_utils</li>
 <li>sim_plot function in Sim_utils</li>
 
-
+<br><br>
 Existing Methods edited in the project:
 
 <li>AWGN: __init__ method</li>
@@ -44,5 +46,5 @@ Existing Methods edited in the project:
 <li>Repetition: update_spcc method</li>
 <li>Shorten: update_spcc method</li>
 
-
+<br><br>
 To simulate, edit and run the <strong>complex_sim.py</strong> file or <strong>complex_sim.ipynb</strong> file for interactive simulation
