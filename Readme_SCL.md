@@ -5,7 +5,7 @@ Project focuses on implementing CRC aiaded SCL decoder and Rate Matching schemes
 README.md instructions still applies for most part of the project.
 
 <br>
-Added modeules to the project:
+<strong>Added modeules to the project:</strong>
 
 <li>ListSCD.py</li>
 <li>Repetition.py</li>
@@ -13,7 +13,7 @@ Added modeules to the project:
 <li>Sim_utils.py</li>
 
 <br><br>
-Added Methods to the project:
+<strong>Added Methods to the project:</strong>
 
 <li>get_polar_5g_positions Method in Construct Class</li>
 <li>__init__ Method in ListSCD Class</li>
@@ -33,7 +33,7 @@ Added Methods to the project:
 <li>sim_plot function in Sim_utils</li>
 
 <br><br>
-Existing Methods edited in the project:
+<strong>Existing Methods edited in the project:</strong>
 
 <li>AWGN: __init__ method</li>
 <li>AWGN: noise method</li>
