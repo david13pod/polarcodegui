@@ -3,7 +3,7 @@ import numpy as np
 import json
 
 # simulate test code
-myPC = PolarCode(64, 32)
+myPC = PolarCode(64, 64, 32)
 myPC.simulate(save_to='data/pc_sim', Eb_No_vec=np.arange(1,5), design_SNR=5.0, manual_const_flag=False)
 myPC.plot(['pc_sim'], 'data/')
 

@@ -6,6 +6,7 @@ algorithm implementations.
 """
 
 import numpy as np
+from numpy.lib.function_base import flip
 
 def bit_reversed(x, n):
     """
@@ -270,3 +271,93 @@ def logQ_Borjesson(x):
     else:
         y = -np.log((1 - a) * x + a * np.sqrt(b + x * x)) - (x * x / 2) - half_log2pi
     return y
+
+class CRC:
+    '''
+    Implementation of CRC encoder and decoder/detector
+    '''
+    def __init__(self, info, crc_n):
+        self.info = list(info)
+        self.crc_used=True
+        # Apply 5G allowed crc polynomials nos
+        if crc_n == 0:
+            self.crc_used=False
+            print ('crc_n have not been added in CRC !')
+        elif crc_n == 6:
+            loc = [6, 5, 0]
+        elif crc_n ==11:
+            loc = [11, 10, 9, 5, 0]
+        elif crc_n == 24:
+            loc = [24, 23, 21, 20, 17, 15, 13, 12, 8, 4, 2, 1, 0]
+        else:
+            self.crc_used=False
+            print ('crc_n have not been added in CRC !')
+        
+        #create divisor variable
+        if self.crc_used != False:
+            p = [0 for i in range(crc_n + 1)]
+            for i in loc:
+                p[i] = 1
+            # flip divisor
+            p=p[::-1]
+
+            info=self.info.copy()
+            times = len(info)
+
+            # append crcn zeros
+            for i in range(crc_n):
+                info.append(0)
+
+            # result container
+            q = []
+            for i in range(times):
+                if info[i] == 1:
+                    q.append(1)
+                    for j in range(crc_n+1):
+                        info[j + i] = info[j + i] ^ p[j] #XOR operation
+                else:
+                    q.append(0)
+
+        
+            check_code = info[-crc_n::] #reminder as the crc to be added
+
+            # append reminder to infomation bit
+            code = self.info.copy()
+            for i in check_code:
+                code.append(i)
+
+            self.crc_n = crc_n
+            self.p = p
+            self.q = q
+            self.check_code = check_code
+            self.code = np.array(code)
+        
+
+    def detection(self,decoded_info):
+        if self.crc_used != False:
+            crc_n=self.crc_n
+            divisor=self.p
+            coded_info=list(decoded_info.copy())
+            info_len=len(coded_info)-crc_n
+            qq = []
+            for i in range(info_len):
+                if coded_info[i] == 1:
+                    qq.append(1)
+                    for j in range(crc_n+1):
+                        coded_info[j + i] = coded_info[j + i] ^ divisor[j]
+                else:
+                    qq.append(0)
+
+            check_decoded = coded_info[-crc_n::]
+            confirm=sum(check_decoded)
+            
+
+            if confirm == 0:
+                value = 1
+                msg=list(decoded_info.copy())[:info_len]
+            else:
+                value = 0
+                msg=list(decoded_info.copy())[:info_len]
+            return (value,msg)
+        else:
+            raise('CRC not used, Detector cannot work')

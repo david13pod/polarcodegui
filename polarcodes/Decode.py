@@ -7,9 +7,10 @@ A polar decoder class. Currently only Successive Cancellation Decoder (SCD) is s
 import numpy as np
 from polarcodes.utils import *
 from polarcodes.SCD import SCD
+from polarcodes.ListSCD import *
 
 class Decode:
-    def __init__(self, myPC, decoder_name = 'scd'):
+    def __init__(self, myPC, list=0, decoder_name = 'scd'):
         """
         Parameters
         ----------
@@ -21,16 +22,28 @@ class Decode:
 
         self.myPC = myPC
         self.x_noisy = np.array([])
+        self.list=list
 
         # select decoding algorithm
         if decoder_name == 'scd':
             scd = SCD(myPC)
             self.x_noisy = scd.decode()
-            self.myPC.message_received = self.noisy_message(self.x_noisy, False)
+            self.myPC.decoded_message = self.noisy_message(self.x_noisy, False)
+            self.myPC.message_received = myPC.crc_encode.detection(self.myPC.decoded_message)[1]
+
+        elif decoder_name == 'SCL':
+            # calls the list decoder class to implement SCL decoding
+            scl=ListSCD(myPC, list)
+            self.myPC.decoded_message=scl.decode()
+            # No need for frozen_lookup, already done in the SCL decoder`
+            self.myPC.message_received=myPC.crc_encode.detection(self.myPC.decoded_message)[1]
+
         elif decoder_name == 'systematic_scd':
             scd = SCD(myPC)
             self.x_noisy = scd.decode()
             self.myPC.message_received = self.noisy_message(self.x_noisy, True)
+        else:
+            raise ValueError('Wrong decoder name')
 
     def noisy_message(self, x_noisy, systematic_flag):
         if systematic_flag:

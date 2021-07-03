@@ -24,7 +24,7 @@ class Shorten(Construct):
 
         """
 
-        super().__init__(myPC, design_SNR, True)
+        super().__init__(myPC, design_SNR, False)
         if manual:
             return
         else:
@@ -44,18 +44,25 @@ class Shorten(Construct):
         elif myPC.punct_algorithm == 'perm':  # Perm shortening
             myPC.punct_set = self.perm(myPC)
             myPC.source_set = myPC.punct_set
+        elif myPC.punct_algorithm == 'fiveG_shortnening':  # Perm shortening
+            myPC.punct_set = self.fiveG_shortnening(myPC)
+            myPC.source_set = myPC.punct_set
+            
 
         myPC.punct_set_lookup = myPC.get_lut(myPC.punct_set)
         myPC.source_set_lookup = myPC.get_lut(myPC.source_set)
 
         # decide if we want a puncturing-dependent frozen set
-        if not myPC.update_frozen_flag:
+        if myPC.update_frozen_flag==False:
+            # self.construction_type=myPC.construction_type
             self.update_mpcc(myPC, design_SNR)
         else:
             self.shortened_pcc(myPC, design_SNR)
+        
         myPC.frozen = self.frozen_from_pattern(myPC)
         myPC.frozen_lookup = myPC.get_lut(myPC.frozen)
-        myPC.FERestimate = self.FER_estimate(myPC.frozen, myPC.z)
+        if myPC.construction_type != '5g':
+            myPC.FERestimate = self.FER_estimate(myPC.frozen, myPC.z)
 
     def shortened_pcc(self, myPC, design_SNR):
         """
@@ -81,6 +88,8 @@ class Shorten(Construct):
             z0 = np.array([4 * design_SNR_normalised] * myPC.N)
             z0[myPC.punct_set] = np.inf
             myPC.reliabilities, myPC.frozen, myPC.FERestimate = self.general_ga(myPC, z0)
+        elif myPC.construction_type == '5g':
+            myPC.reliabilities, myPC.frozen = self.get_polar_5g_positions(myPC)
 
     def wls_pattern(self, myPC):
         """
@@ -103,7 +112,7 @@ class Shorten(Construct):
 
         """
 
-        punct_set = np.array(range(myPC.N - myPC.s, myPC.N))
+        punct_set = np.array(range(myPC.M, myPC.N))
         return punct_set
 
     def brs_pattern(self, myPC):
@@ -215,3 +224,35 @@ class Shorten(Construct):
         reversed_indices = np.array([bit_reversed(i, num_bits) for i in myPC.reliabilities])
         punct_set = np.array(reversed_indices[-s:])  # last s bits of reversed_indices
         return punct_set
+    
+    def fiveG_shortnening(self,myPC):
+        '''
+        select last Ubit=N-E
+        '''
+        punct_set = np.array(range(myPC.M, myPC.N))
+        return punct_set
+
+    # gives same result as frozen_from_pattern()
+    def frozen_pattern_5g(self, myPC):
+        """
+        selection of frozen pattern from reliability sequence according 
+        to the rate matching scheme
+        
+        Prefreezing Q1
+        Extra Freezing Q2 = 0 for shorening
+        Reliability Freezing Q3
+
+        source: 'Design of Polar Codes in 5G New Radio'
+        Valerio Bioglio, Member, IEEE, Carlo Condo, Member, IEEE, Ingmar Land, Senior Member, IEEE
+
+        """
+
+        Q1=myPC.source_set
+        # Q2=0 #for shorening
+        R_m = []
+        for i in range(myPC.N):    # add elements from R not in punct_set to R_m
+            if myPC.reliabilities[i] not in Q1:
+                R_m.append(myPC.reliabilities[i])
+        Q3 = myPC.M - myPC.K   # number of frozen bits left to select
+        frozen = np.array(np.append(np.array(R_m[:Q3]), Q1))   # first t bits of R_m, then append S
+        return frozen

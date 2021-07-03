@@ -70,7 +70,7 @@ class PolarCode:
 
     """
 
-    def __init__(self, M, K, punct_params=('', '', [], [], None,)):
+    def __init__(self,N, M, K, punct_params=('', '', [], [], None,)):
         """
         Parameters
         ----------
@@ -83,11 +83,11 @@ class PolarCode:
             The syntax is (``punct_type``, ``punct_algorithm``, ``punct_set``, ``source_set``, ``update_frozen_flag``)
         """
 
-        self.initialise_code(M, K, punct_params)
+        self.initialise_code(N,M, K, punct_params)
         self.status_bar = None  # set by the GUI so that the simulation progress can be tracked
         self.gui_widgets = []
 
-    def initialise_code(self, M, K, punct_params):
+    def initialise_code(self,N, M, K, punct_params):
         """
         Initialise the code with a set of parameters the same way as the constructor.
         Call this any time you want to change the code rate.
@@ -95,7 +95,8 @@ class PolarCode:
 
         # mothercode parameters
         self.M = M
-        self.N = int(2**(np.ceil(np.log2(M))))
+        # self.N = int(2**(np.ceil(np.log2(M))))
+        self.N = N
         self.n = int(np.log2(self.N))
         self.F = arikan_gen(self.n)
         self.K = K
@@ -151,7 +152,9 @@ class PolarCode:
         output += "                        update_frozen_flag: " + str(self.update_frozen_flag) + "}" + '\n'
         return output
 
-    def set_message(self, m):
+    
+
+    def set_message(self, m, crc_n):
         """
         Set the message vector to the non-frozen bits in ``x``. The frozen bits in ``frozen`` are set to zero.
 
@@ -163,7 +166,9 @@ class PolarCode:
         """
 
         self.message = m
-        self.x[self.frozen_lookup == 1] = m
+        self.crc_encode=CRC(self.message,crc_n)
+        self.crc_coded=self.crc_encode.code
+        self.x[self.frozen_lookup == 1] = self.crc_coded
         self.u = self.x.copy()
 
     def get_codeword(self):

@@ -36,6 +36,8 @@ class Construct:
         elif myPC.construction_type == 'ga':
             z0 = np.array([4 * design_SNR_normalised] * myPC.N)
             myPC.reliabilities, myPC.frozen, myPC.FERestimate = self.general_ga(myPC, z0)
+        elif myPC.construction_type == '5g':
+            myPC.reliabilities, myPC.frozen = self.get_polar_5g_positions(myPC)
         myPC.frozen_lookup = myPC.get_lut(myPC.frozen)
 
     def general_pcc(self, myPC, z0):
@@ -185,3 +187,29 @@ class Construct:
             if i not in frozen:
                 FERest = FERest + np.exp(z[i]) - np.exp(z[i]) * FERest
         return FERest
+
+    
+
+    def get_polar_5g_positions(self, myPC):
+        '''
+        Polar code construction according to 3gpp NR standard
+        '''
+        reliabilit_Seq = np.genfromtxt('5g_reliability.csv', delimiter=',')#extract universal reliability sequence from the csv file
+        reliabilit_Seq = reliabilit_Seq.astype(dtype=np.int)
+        pos_values = reliabilit_Seq[:, 1::2].T.flatten()
+        if myPC.N == 1024:
+            reliabilities=pos_values
+            frozen=list ((reliabilities[0:(myPC.N - myPC.K)]))
+            return reliabilities, frozen
+            
+        reliabilities = np.zeros(myPC.N, dtype=int)
+        n_found = 0
+        idx = 0
+        while n_found < myPC.N:
+            if pos_values[idx] < myPC.N:
+                reliabilities[n_found] = pos_values[idx]
+                n_found += 1
+            idx += 1
+        frozen=list ((reliabilities[0:(myPC.N - myPC.K)]))
+
+        return reliabilities, frozen
