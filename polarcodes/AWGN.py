@@ -140,12 +140,12 @@ class AWGN:
 
         """
         #Eb_No
-        # Linear_EbNo=10**(-self.Eb_No_dB/10)
-        # s = np.random.normal(0, np.sqrt( (2*Linear_EbNo*self.coderate)), size=N)
+        Linear_EbNo=10**(-self.Eb_No_dB/10)
+        s = np.random.normal(0, np.sqrt( (2*Linear_EbNo)), size=N)
 
         # SNR
-        Linear_EbNo=10**(-self.Eb_No_dB/10)
-        s = np.random.normal(0, np.sqrt((2*Linear_EbNo)), size=N)
+        # Linear_EbNo=10**(-self.Eb_No_dB/10)
+        # s = np.random.normal(0, np.sqrt((2*Linear_EbNo*self.coderate)), size=N)
 
         # eliminate channel effect
         # s=np.zeros(N)
