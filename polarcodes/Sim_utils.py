@@ -1,6 +1,5 @@
 import numpy as np
 from polarcodes import *
-from polarcodes import Repetition
 import matplotlib.pyplot as plt  
 
 
@@ -85,13 +84,13 @@ def sim_plot(BLER_list,design_SNR,msg_len,N,rate,match_rate,List_n):
     #plt.axis([0, 20, 0, 3.0e-1])
     plt.xscale('linear')
     plt.yscale('log')
-    fig.suptitle('SNR_dB vs BLER ')
+    fig.suptitle('EbNo vs BLER ')
     plt.ylim(5e-4, 2e0)
     plt.xlim(-2, 6)
-    plt.xlabel('SNR_dB')
+    plt.xlabel('EbNo')
     plt.ylabel('BLER')
     plt.legend(loc='best')
     plt.figtext(.51, .9, "rates: Rep<0.273<Punct<0.378<Short, L = "+str(List_n))
     plt.grid(True,which="both")
     plt.show()
-    fig.savefig('SNR_vs_BLER_Comp2_rateL8.jpg', bbox_inches='tight')
+    fig.savefig('EbNo_vs_BLER_Compx_rateL8.jpg', bbox_inches='tight')
