@@ -13,7 +13,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/david13pod/polarcodegui",
-    download_url="https://github.com/david13pod/polarcodegui/archive/v_1_3.tar.gz",
+    download_url="https://github.com/david13pod/polarcodegui//tarball",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
