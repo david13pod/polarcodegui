@@ -13,3 +13,6 @@ from polarcodes.AWGN import AWGN
 from polarcodes.Puncture import Puncture
 from polarcodes.PolarCode import PolarCode
 from polarcodes.GUI import GUI
+from polarcodes.Sim_utils import *
+from polarcodes.Repetition import Repetition
+from polarcodes.ListSCD import ListSCD
