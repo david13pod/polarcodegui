@@ -14,5 +14,5 @@ from polarcodes.Puncture import Puncture
 from polarcodes.PolarCode import PolarCode
 from polarcodes.GUI import GUI
 from polarcodes.Sim_utils import *
-from polarcodes.Repetition import Repetition
+# from polarcodes.Repetition import *
 from polarcodes.ListSCD import ListSCD

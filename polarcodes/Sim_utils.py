@@ -1,5 +1,6 @@
 import numpy as np
 from polarcodes import *
+from polarcodes.Repetition import Repetition
 import matplotlib.pyplot as plt  
 
 
