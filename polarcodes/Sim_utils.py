@@ -66,7 +66,7 @@ def matching_scheme_selector(N,M,k,match_rate,useRM,snr,construction):
         params = ('rep', None, None, None, False)
         myPC = PolarCode(N,M, k, params)
         myPC.construction_type = construction
-        Repetition.Repetition(myPC, snr)
+        Repetition(myPC, snr)
         # Repetition(myPC, design_SNR)
         return myPC
     else:
