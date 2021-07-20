@@ -1,6 +1,5 @@
 import numpy as np
 from polarcodes import *
-from polarcodes import Sim_utils
 import statistics as st
 import time
 
