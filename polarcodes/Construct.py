@@ -194,7 +194,7 @@ class Construct:
         '''
         Polar code construction according to 3gpp NR standard
         '''
-        reliabilit_Seq = np.genfromtxt('5g_reliability.csv', delimiter=',')#extract universal reliability sequence from the csv file
+        reliabilit_Seq = np.genfromtxt('polarcodes/5g_reliability.csv', delimiter=',')#extract universal reliability sequence from the csv file
         reliabilit_Seq = reliabilit_Seq.astype(dtype=np.int)
         pos_values = reliabilit_Seq[:, 1::2].T.flatten()
         if myPC.N == 1024:
