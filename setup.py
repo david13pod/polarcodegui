@@ -15,6 +15,7 @@ setuptools.setup(
     url="https://github.com/david13pod/polarcodegui",
     download_url="https://github.com/david13pod/polarcodegui/tarball",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
