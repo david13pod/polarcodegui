@@ -64,9 +64,11 @@ def lower_llr(l1, l2, b):
         if l1 == np.inf or l2 == np.inf:
             return np.inf
         else:  # principal decoding equation
-            return l1 + l2
+            # print(l1,' f ', l2, l1+l2)
+            return round(l1 + l2,20)
     elif b == 1:  # principal decoding equation
-        return l1 - l2
+        # print(l1,' ', l2)
+        return round(l1 - l2,20)
     return np.nan
 
 def active_llr_level(i, n):
