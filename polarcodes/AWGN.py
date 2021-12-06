@@ -33,25 +33,29 @@ class AWGN:
         self.No = 1
         self.plot_noise = plot_noise
 
-        self.myPC.tx = self.modulation(self.myPC.u)
+        # self.myPC.tx = self.modulation(self.myPC.u)
 
         if self.myPC.punct_flag:
             # punctured bit not meant to be sent over the channel
             if self.myPC.punct_type == 'shorten':  #shortening procedure
-                self.myPC.rx = self.myPC.tx[0:self.myPC.M] + self.noise(self.myPC.M)
+                self.myPC.tx=self.myPC.u[0:self.myPC.M]
+                self.myPC.rx = self.modulation(self.myPC.tx) + self.noise(self.myPC.M)
+                # self.myPC.rx = self.myPC.tx[0:self.myPC.M] + self.noise(self.myPC.M)
                 self.myPC.likelihoods = np.concatenate((np.array(
                     self.get_likelihoods(self.myPC.rx), dtype=np.float64),
                     np.zeros(self.myPC.s,dtype=np.float64)))
                 self.myPC.likelihoods[self.myPC.source_set_lookup == 0] = np.inf
             elif self.myPC.punct_type == 'punct':  #puncturing procedure
-                self.myPC.rx = self.myPC.tx[self.myPC.s:self.myPC.N] + self.noise(self.myPC.M)
+                self.myPC.tx=self.myPC.u[self.myPC.s:self.myPC.N]
+                self.myPC.rx = self.modulation(self.myPC.tx) + self.noise(self.myPC.M)
+                # self.myPC.rx = self.myPC.tx[self.myPC.s:self.myPC.N] + self.noise(self.myPC.M)
                 self.myPC.likelihoods = np.concatenate((np.zeros(self.myPC.s,dtype=np.float64),
                     np.array(self.get_likelihoods(self.myPC.rx), dtype=np.float64)))
                 self.myPC.likelihoods[self.myPC.source_set_lookup == 0] = 0
             elif self.myPC.punct_type == 'rep':   #repetition procedure
                 match_position= np.array(range(0,self.myPC.M))% self.myPC.N 
-                self.myPC.tx=self.myPC.tx[match_position]
-                self.myPC.rx = self.myPC.tx + self.noise(self.myPC.M)
+                self.myPC.tx=self.myPC.u[match_position]
+                self.myPC.rx = self.modulation(self.myPC.tx) + self.noise(self.myPC.M)
                 rep_remover=self.myPC.rx[0:self.myPC.N]
                 for j in range(self.myPC.N,self.myPC.M):
                     index = (j% self.myPC.N)
@@ -61,6 +65,7 @@ class AWGN:
                     self.get_likelihoods(self.myPC.rx), dtype=np.float64)
                 
         else:
+            self.myPC.tx = self.modulation(self.myPC.u)
             self.myPC.rx = self.myPC.tx + self.noise(self.myPC.N)
             self.myPC.likelihoods = np.array(
                 self.get_likelihoods(self.myPC.rx), dtype=np.float64)
